@@ -1,0 +1,288 @@
+#/* $begin ncopy-ys */
+##################################################################
+# ncopy.ys - Copy a src block of len ints to dst.
+# Return the number of positive ints (>0) contained in src.
+#
+# Include your name and ID here.
+# name: 吕嘉伟 student id: 515030910036
+#
+# Describe how and why you modified the baseline code.
+# 1.用iaddl优化irmovl和addl的操作
+# 2.新增load forwarding技术，优化rmmovl和pushl指令的暂停
+# 3.运用循环展开技术
+##################################################################
+# Do not modify this portion
+# Function prologue.
+ncopy:	pushl %ebp		# Save old frame pointer
+	rrmovl %esp,%ebp	# Set up new frame pointer
+	pushl %esi		# Save callee-save regs
+	pushl %ebx
+	pushl %edi
+	mrmovl 8(%ebp),%ebx	# src
+	mrmovl 16(%ebp),%edx	# len
+	mrmovl 12(%ebp),%ecx	# dst
+
+##################################################################
+# You can modify this portion
+	# Loop header
+	xorl   %eax, %eax		# count = 0;				
+	iaddl  $-15,  %edx		# limit = len - 15 and limit <= 0?
+	jle    Out			# if so, goto Out:
+# 1st 
+Loop1:	mrmovl (%ebx),  %esi		# read val from src[i]
+	rmmovl %esi,    (%ecx)		# and store it to dst[i]
+	andl   %esi,    %esi		# val <= 0?
+	jle    Loop2			# if so, goto Loop2:
+	iaddl  $1,      %eax		# count++
+# 2nd
+Loop2: 
+	mrmovl 4(%ebx), %esi		# val = src[i+1]
+	rmmovl %esi,	4(%ecx)		# dst[i+1] = val
+	andl   %esi,	%esi		# val <= 0?
+	jle    Loop3			# if so ,goto Loop3:
+	iaddl  $1,	%eax		# count++
+# 3rd
+Loop3:	
+	mrmovl 8(%ebx), %esi		# val = src[i+2}
+	rmmovl %esi,	8(%ecx)		# dst[i+2] = val
+	andl   %esi,	%esi		# val <= 0?
+	jle    Loop4			# if so ,goto Loop4:
+	iaddl  $1,	%eax		# count++
+# 4th
+Loop4:
+	mrmovl 12(%ebx), %esi		# val = src[i+3}
+	rmmovl %esi,	12(%ecx)	# dst[i+3] = val
+	andl   %esi,	%esi		# val <= 0?
+	jle    Loop5			# if so ,goto Lopp5:
+	iaddl  $1,	%eax		# count++
+# 5th
+Loop5:
+	mrmovl 16(%ebx), %esi		# val = src[i+4}
+	rmmovl %esi,	16(%ecx)	# dst[i+4] = val
+	andl   %esi,	%esi		# val <= 0?
+	jle    Loop6			# if so ,goto Loop6:
+	iaddl  $1,	%eax		# count++
+# 6th
+Loop6:
+	mrmovl 20(%ebx), %esi		# val = src[i+5}
+	rmmovl %esi,	20(%ecx)	# dst[i+5] = val
+	andl   %esi,	%esi		# val <= 0?
+	jle    Loop7			# if so ,goto Loop7:
+	iaddl  $1,	%eax		# count++
+# 7th
+Loop7:
+	mrmovl 24(%ebx), %esi		# val = src[i+6}
+	rmmovl %esi,	24(%ecx)	# dst[i+6] = val
+	andl   %esi,	%esi		# val <= 0?
+	jle    Loop8			# if so ,goto Loop8:
+	iaddl  $1,	%eax		# count++
+# 8th
+Loop8:
+	mrmovl 28(%ebx), %esi		# val = src[i+7}
+	rmmovl %esi,	28(%ecx)	# dst[i+7] = val
+	andl   %esi,	%esi		# val <= 0?
+	jle    Loop9			# if so ,goto Loop9:
+	iaddl  $1,	%eax		# count++
+# 9th
+Loop9:
+	mrmovl 32(%ebx), %esi		# val = src[i+8}
+	rmmovl %esi,	32(%ecx)	# dst[i+8] = val
+	andl   %esi,	%esi		# val <= 0?
+	jle    Loop10			# if so ,goto Loop10:
+	iaddl  $1,	%eax		# count++
+# 10th
+Loop10:
+	mrmovl 36(%ebx), %esi		# val = src[i+9}
+	rmmovl %esi,	36(%ecx)	# dst[i+9] = val
+	andl   %esi,	%esi		# val <= 0?
+	jle    Loop11			# if so ,goto Loop11:
+	iaddl  $1,	%eax		# count++
+# 11st
+Loop11:
+	mrmovl 40(%ebx), %esi		# val = src[i+10}
+	rmmovl %esi,	40(%ecx)	# dst[i+10] = val
+	andl   %esi,	%esi		# val <= 0?
+	jle    Loop12			# if so ,goto Loop12:
+	iaddl  $1,	%eax		# count++
+# 12nd
+Loop12:
+	mrmovl 44(%ebx), %esi		# val = src[i+11}
+	rmmovl %esi,	44(%ecx)	# dst[i+11] = val
+	andl   %esi,	%esi		# val <= 0?
+	jle    Loop13			# if so ,goto Loop13:
+	iaddl  $1,	%eax		# count++
+# 13rd
+Loop13:
+	mrmovl 48(%ebx), %esi		# val = src[i+12}
+	rmmovl %esi,	48(%ecx)	# dst[i+12] = val
+	andl   %esi,	%esi		# val <= 0?
+	jle    Loop14			# if so ,goto Loop14:
+	iaddl  $1,	%eax		# count++
+# 14th
+Loop14:
+	mrmovl 52(%ebx), %esi		# val = src[i+13}
+	rmmovl %esi,	52(%ecx)	# dst[i+13] = val
+	andl   %esi,	%esi		# val <= 0?
+	jle    Loop15			# if so ,goto Loop15:
+	iaddl  $1,	%eax		# count++
+# 15th
+Loop15:
+	mrmovl 56(%ebx), %esi		# val = src[i+14}
+	rmmovl %esi,	56(%ecx)	# dst[i+14] = val
+	andl   %esi,	%esi		# val <= 0?
+	jle    Loop16			# if so ,goto Loop16:
+	iaddl  $1,	%eax		# count++
+# 16th
+Loop16:
+	mrmovl 60(%ebx), %esi		# val = src[i+15}
+	rmmovl %esi,	60(%ecx)	# dst[i+15] = val
+	andl   %esi,	%esi		# val <= 0?
+	jle    Npos			# if so ,goto Npos:
+	iaddl  $1,	%eax		# count++
+# Npos
+Npos:	
+	iaddl  $-16, 	%edx		# limit-=16
+	iaddl  $64, 	%ebx		# src+=16
+	iaddl  $64, 	%ecx		# dst+=16
+	andl   %edx,	%edx		# limit > 0?
+	jg     Loop1			# if so, goto Loop1:
+
+Out:
+	addl   %edx,	%edx
+	addl   %edx,	%edx
+	mrmovl JmpEnd(%edx),%edx
+	pushl  %edx			# 跳转到相应位置的函数，补全剩余内容
+	ret
+
+Jmp15:
+	mrmovl 56(%ebx),%esi
+	rmmovl %esi,	56(%ecx)
+	andl   %esi,	%esi
+	jle    Jmp14
+	iaddl  $1,	%eax
+Jmp14:
+	mrmovl 52(%ebx),%esi
+	rmmovl %esi,	52(%ecx)
+	andl   %esi,	%esi
+	jle    Jmp13
+	iaddl  $1,	%eax
+Jmp13:
+	mrmovl 48(%ebx),%esi
+	rmmovl %esi,	48(%ecx)
+	andl   %esi,	%esi
+	jle    Jmp12
+	iaddl  $1,	%eax
+Jmp12:
+	mrmovl 44(%ebx),%esi
+	rmmovl %esi,	44(%ecx)
+	andl   %esi,	%esi
+	jle    Jmp11
+	iaddl  $1,	%eax
+Jmp11:
+	mrmovl 40(%ebx),%esi
+	rmmovl %esi,	40(%ecx)
+	andl   %esi,	%esi
+	jle    Jmp10
+	iaddl  $1,	%eax
+Jmp10:
+	mrmovl 36(%ebx),%esi
+	rmmovl %esi,	36(%ecx)
+	andl   %esi,	%esi
+	jle    Jmp9
+	iaddl  $1,	%eax
+Jmp9:
+	mrmovl 32(%ebx),%esi
+	rmmovl %esi,	32(%ecx)
+	andl   %esi,	%esi
+	jle    Jmp8
+	iaddl  $1,	%eax
+Jmp8:
+	mrmovl 28(%ebx),%esi
+	rmmovl %esi,	28(%ecx)
+	andl   %esi,	%esi
+	jle    Jmp7
+	iaddl  $1,	%eax
+Jmp7:
+	mrmovl 24(%ebx),%esi
+	rmmovl %esi,	24(%ecx)
+	andl   %esi,	%esi
+	jle    Jmp6
+	iaddl  $1,	%eax
+Jmp6:
+	mrmovl 20(%ebx),%esi
+	rmmovl %esi,	20(%ecx)
+	andl   %esi,	%esi
+	jle    Jmp5
+	iaddl  $1,	%eax
+Jmp5:
+	mrmovl 16(%ebx),%esi
+	rmmovl %esi,	16(%ecx)
+	andl   %esi,	%esi
+	jle    Jmp4
+	iaddl  $1,	%eax
+Jmp4:
+	mrmovl 12(%ebx),%esi
+	rmmovl %esi,	12(%ecx)
+	andl   %esi,	%esi
+	jle    Jmp3
+	iaddl  $1,	%eax
+Jmp3:
+	mrmovl 8(%ebx),	%esi
+	rmmovl %esi,	8(%ecx)
+	andl   %esi,	%esi
+	jle    Jmp2
+	iaddl  $1,	%eax
+Jmp2:	
+	mrmovl 4(%ebx),	%esi
+	rmmovl %esi,	4(%ecx)
+	andl   %esi,	%esi
+	jle    Jmp1
+	iaddl  $1,	%eax
+Jmp1:
+	mrmovl (%ebx),	%esi
+	rmmovl %esi,	(%ecx)
+	andl   %esi,	%esi
+	jle    Jmp0
+	iaddl  $1,	%eax
+
+Jmp0:
+	popl   %edi
+	popl   %ebx
+	popl   %esi
+	leave
+	ret
+##################################################################
+# Do not modify the following section of code
+# Function epilogue.
+Done:
+	popl %edi               # Restore callee-save registers
+	popl %ebx
+	popl %esi
+	rrmovl %ebp,%esp
+	popl %ebp
+	ret
+##################################################################
+
+# Jmp Table
+	.align 4
+JmpStart:
+	.long Jmp0
+	.long Jmp1
+	.long Jmp2
+	.long Jmp3
+	.long Jmp4
+	.long Jmp5
+	.long Jmp6
+	.long Jmp7
+	.long Jmp8
+	.long Jmp9
+	.long Jmp10
+	.long Jmp11
+	.long Jmp12
+	.long Jmp13
+	.long Jmp14
+JmpEnd:	.long Jmp15
+
+# Keep the following label at the end of your function
+End:
+#/* $end ncopy-ys */

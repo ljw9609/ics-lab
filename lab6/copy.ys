@@ -1,0 +1,102 @@
+# name:吕嘉伟 student id:515030910036
+
+# /* copy.ys */
+
+		.pos 0
+
+# 建立帧栈，参数压栈，调用函数
+
+init:
+		irmovl Stack, %esp
+		rrmovl %esp,  %ebp
+		irmovl $0x3,   %edx
+		pushl  %edx
+		irmovl dest,  %edx
+		pushl  %edx
+		irmovl src,   %edx
+		pushl  %edx
+		call copy_block
+		halt
+# data
+		.align 4
+src:
+		.long 0x00a
+		.long 0x0b0
+		.long 0xc00
+
+dest:
+		.long 0x111
+		.long 0x222
+		.long 0x333
+
+# copy_block函数 int copy_block(int *src,int *dest,int len)
+
+copy_block:
+		pushl  %ebp
+		rrmovl %esp,    %ebp			
+		mrmovl 8(%ebp), %ebx	#src
+		mrmovl 12(%ebp),%ecx	#dest
+		mrmovl 16(%ebp),%edx	#len
+		irmovl $0x0,	%eax	#result = 0
+Loop:
+		andl   %edx,	%edx	#len > 0
+		jle    End
+		mrmovl (%ebx),	%esi	#val = *src
+		rmmovl %esi,	(%ecx)  #*dest = val
+		xorl   %esi,	%eax	#result ^= val
+		irmovl $0x1,	%edi
+		subl   %edi,	%edx	#len--
+		irmovl $0x4,	%edi
+		addl   %edi,	%ebx	#src++
+		addl   %edi,	%ecx	#dest++
+		jmp    Loop
+
+End:		
+		rrmovl %eax,	%esi
+		rrmovl %ebp,	%esp
+		popl   %ebp
+		ret
+
+# Stack
+		.pos 0x100
+Stack:
+		
+
+		
+		
+			
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+
+
+
+
+
+
+
+
+
+
+
+		

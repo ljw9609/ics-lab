@@ -1,0 +1,61 @@
+# name:吕嘉伟 student id:515030910036
+
+# /* sum.ys */
+
+		.pos 0
+
+# 建立帧栈，参数压栈，调用函数
+
+init:				
+		irmovl  Stack, %esp
+		rrmovl  %esp,  %ebp
+		irmovl  ele1,  %eax
+		pushl   %eax
+		call    sum_list
+		halt
+
+# Sample linked list
+		.align 4
+ele1:
+		.long 0x00a
+		.long ele2
+ele2:	
+		.long 0x0b0
+		.long ele3
+ele3:	
+		.long 0xc00
+		.long 0
+
+# sum_list函数 int sum_list(list_ptr ls)
+
+sum_list:	
+			pushl  %ebp
+			rrmovl %esp,   %ebp
+			irmovl $0x0,   %eax		#val = 0
+			mrmovl 8(%ebp),%ebx		#ls
+			andl   %ebx,   %ebx		#ls ?= NULL
+			je     End
+Loop:		
+			mrmovl (%ebx), %ecx		#ls->val
+			addl   %ecx,   %eax		#val += ls->val
+			mrmovl 4(%ebx),%ebx		#ls = ls->next
+			andl   %ebx,   %ebx     	#ls ?= NULL
+			jne    Loop
+End:
+			rrmovl %ebp,   %esp
+			popl   %ebp
+			ret
+
+# Stack
+		.pos 0x100
+Stack:
+
+
+
+
+
+
+
+
+
+

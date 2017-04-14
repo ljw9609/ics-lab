@@ -1,0 +1,70 @@
+# name:吕嘉伟 student id:515030910036
+
+# /* rsunm.ys */
+
+		.pos 0
+
+# 建立帧栈，参数压栈，调用函数
+
+init:
+		irmovl Stack, %esp
+		rrmovl %esp,  %ebp
+		irmovl ele1,  %edx
+		pushl  %edx
+		call   rsum_list
+		halt
+
+# Sample linked list
+		.align 4
+ele1:
+		.long 0x00a
+		.long ele2
+ele2:	
+		.long 0x0b0
+		.long ele3
+ele3:	
+		.long 0xc00
+		.long 0
+
+# rsum_list函数 int rsum_list(list_ptr ls)
+
+rsum_list:
+		pushl  %ebp
+		rrmovl %esp,   %ebp
+		pushl  %ebx		#callee save %ebx
+		mrmovl 8(%ebp),%edx	#ls
+		andl   %edx,   %edx	#ls != NULL
+		jne    L1
+		jmp    End
+
+L1:
+		mrmovl (%edx), %ebx	#val = ls->val		
+		mrmovl 4(%edx),%edx     #ls->next
+		pushl  %edx
+		call   rsum_list	#call rsum_list(ls->next)
+		addl   %ebx,   %eax
+		popl   %edx
+		
+End:		
+		popl   %ebx
+		popl   %ebp
+		ret
+
+#Stack
+		.pos 0x100
+Stack:
+		
+
+		
+
+
+
+
+
+
+
+
+
+
+		
+
